@@ -1,7 +1,7 @@
 # Cinemaaa: Revolutionizing Movie Streaming with Freedom and Openness
 
 ## Introduction
-
+NVM Its just chatgpt yapping about it!
 "Cinemaaa" isn't just another movie app; it's a paradigm shift in streaming. Offering a vast collection of movies, it stands out for its commitment to freedom, openness, and user experience.
 
 ## Features
