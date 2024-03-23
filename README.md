@@ -3,6 +3,7 @@
 ## Introduction
 NVM Its just chatgpt yapping about it!
 "Cinemaaa" isn't just another movie app; it's a paradigm shift in streaming. Offering a vast collection of movies, it stands out for its commitment to freedom, openness, and user experience.
+![Sukuna Clapping](https://i.makeagif.com/media/12-20-2023/fs--WV.gif)
 
 ## Features
 
