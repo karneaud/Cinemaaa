@@ -31,44 +31,40 @@ const Casdiv = document.querySelector(".Casdiv");
 
 
 const Castfun = (castee) => {
-    let url = "./personDetail.html?id=" + encodeURIComponent(castee.id);
-    return `<div class="Now_playing_movies castdiv" >
-    <a class="posterlink" href="${url}"> <img class="poster" data-id="${castee.id
-        }" src="https://image.tmdb.org/t/p/w500/${castee.profile_path}" alt="${castee.original_name
-        }"></a>
-        <div class="name_character_container">
-         <p class="movie_title">${castee.original_name}</p>
-         <div class="date_rating casteecharacter" >
-         ${castee.character}
-             </div>
+    //let url = "./personDetail.html?id=" + encodeURIComponent(castee.id);
+    return `<div class="castdiv" >
+            <div class="name_character_container">
+                <figure>
+                    <img src="https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg">
+                    <figcaption>
+                    <p class="movie_title">${castee.name}</p></figcaption>
+                </figure>
+                
              </div>
          </div>`;
 };
 
 
 
-
 let url = document.location.href;
 let fetcid = url.slice(url.indexOf("=") + 1);
 window.onload = function () {
-    CurrMovie(fetcid).then((dat) => {
+    CurrMovie(fetcid).then(({ data }) => {
         let htm = "";
-        htm = html2(dat);
+        htm = html2(data);
         movieDetails.innerHTML = htm;
-        let BigPoster = Bigposter(dat);
+        let BigPoster = Bigposter(data.poster_path ?? data.images.filter(i => i.image_type == 'BACKDROP')[0].file_path);
         posterBBig.innerHTML = BigPoster;
-        sectionStory.textContent = dat.overview;
-        let castarr = dat.credits.cast;
+        sectionStory.textContent = data.overview;
+        let castarr = data.cast;
         castarr.forEach(item => {
-            if (item.profile_path !== null) {
-                const castehtml = Castfun(item);
-                Casdiv.insertAdjacentHTML("beforeend", castehtml);
-            }
+            const castehtml = Castfun(item);
+            Casdiv.insertAdjacentHTML("beforeend", castehtml);
         })
-        const castdiv = document.querySelectorAll(".castdiv");
-        castdiv.forEach(
-            (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
-        );
+        // const castdiv = document.querySelectorAll(".castdiv");
+        // castdiv.forEach(
+        //     (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
+        // );
     });
 
 };
@@ -146,21 +142,9 @@ hamburger.addEventListener("click", function () {
 });
 
 
-
-
-
-
-
-const myApi = "6b2dec73b6697866a50cdaef60ccffcb";
-
-
-
-
-
-
 const NowPlaying = async () => {
     const res = await fetch(
-        `https://api.themoviedb.org/3/movie/now_playing?api_key=${myApi}&language=en-US&page=1`
+        `https://66f2f53171c84d8058775e3f.mockapi.io/shows/`
     );
     const data = await res.json();
     const NowPlayingmovies = data.results;
@@ -225,17 +209,17 @@ const averagVoteformat = function (receivedVote) {
 
 
 
-NowPlaying().then((movies) => {
-    movies.forEach((moviee) => {
-        const htmll = NowPlayingfun(moviee);
-        NowPlayingMoviesDiv.insertAdjacentHTML("beforeend", htmll);
-    });
+// NowPlaying().then((movies) => {
+//     movies.forEach((moviee) => {
+//         const htmll = NowPlayingfun(moviee);
+//         NowPlayingMoviesDiv.insertAdjacentHTML("beforeend", htmll);
+//     });
 
-    const NowPlayingMovies = document.querySelectorAll(".Now_playing_movies");
-    NowPlayingMovies.forEach(
-        (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
-    );
-});
+//     const NowPlayingMovies = document.querySelectorAll(".Now_playing_movies");
+//     NowPlayingMovies.forEach(
+//         (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
+//     );
+// });
 
 
 
@@ -307,49 +291,62 @@ rightarrow.forEach(item => item.addEventListener('click', function () {
 /* MOVIE CLCIKED*/
 
 const html2 = function (moviee) {
-    document.title = `${moviee.title + " " + "(" + (dateFormatter(
-        moviee.release_date)) + ")" + " " + "|" + " " + "Cinemaa"}`
+    document.title = `${moviee.title + " " + "(" + moviee.release_date.substr(-1, 4) + ")" + " " + "|" + " " + "Cinemaa"}`;
 
-    let cate = "";
-    moviee.genres.forEach((item) => {
-        cate += `<li class="movie_details_category_ul_li">${item.name}</li>`;
+    let cate = "", poster_path = moviee.poster_path ?? moviee.images.filter(i => i.image_type == 'POSTER')[0].file_path;
+    moviee.genres.forEach((genre) => {
+        cate += `<li class="movie_details_category_ul_li">${genre.name}</li>`;
     });
+
     return `<div class="movie_details">
-    <img class="movie_details_poster" src="https://image.tmdb.org/t/p/w500/${moviee.poster_path}" alt="title">
+    <img class="movie_details_poster" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/${poster_path}" alt="${moviee.title}">
     <div class="movie_details_about">
         <h2 class="movie_details_title">${moviee.title}</h2>
         <div class="movie_details_about_category">
             <ul class="movie_details_about_category_ul">
-            ${cate}
+                ${cate}
             </ul>
         </div>
         <div class="date_rating">
-            <p class="time">${moviee.runtime} minutes</p><span class="dot dot2"></span>
+            <p class="time">${moviee.runtime !== "N/A" ? moviee.runtime : 'Unknown'} minutes</p><span class="dot dot2"></span>
             <p class="date">${moviee.release_date}</p><span class="dot dot2"></span>
-            <p class="rating">${moviee.vote_average}<span><svg xmlns="http://www.w3.org/2000/svg" width="10"
+            <p class="rating">${(Math.random(3) + 2).toFixed(1)}<span><svg xmlns="http://www.w3.org/2000/svg" width="10"
                         height="10" fill="Yellow" class="star bi-star-fill" viewBox="0 0 16 16">
                         <path
                             d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
                     </svg></span></p>
         </div>
-        <a class="playLink" href="https://www.2embed.cc/embed/${moviee.imdb_id}"><button class="play_btn"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
+        <div class="movie_details_plot">
+            <p>${moviee.overview}</p>
+        </div>
+        <div class="movie_details_actors">
+            <strong>Actors:</strong> 
+            <div>${moviee.cast.map(c => `<b>${c.name}(<i>${c.character}</i>)</b>`).join(',&nbsp;')}</div>
+        </div>
+        <div class="movie_details_director">
+            <strong>Director:</strong> ${moviee.crew.filter(c => c.job == 'Director')[0].name}
+        </div>
+        <div class="movie_details_writer">
+            <strong>Writer:</strong> ${moviee.crew.filter(c => (/(writer)/i).test(c.job))[0].name}
+        </div>
+        <a class="playLink" href="${moviee.homepage ?? `https://www.2embed.cc/embed/${moviee.imdb_id}`}" target="_blank"><button class="play_btn"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
                 fill="currentColor" class="path_btn bi-play-fill" viewBox="0 0 16 16">
                 <path class="path_btnn"
                     d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z">
                 </path>
             </svg>Play</button></a> 
     </div>
+</div>`;
 
-</div> `
 };
 
 const Bigposter = function (movieee) {
-    return `<img class="poster_big_img" src="https://image.tmdb.org/t/p/original/${movieee.backdrop_path}" alt="">`;
+    return `<img class="poster_big_img" style="filter:blur(7px)" src="https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movieee}" alt="">`;
 };
 
 const CurrMovie = async (id) => {
     const res = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}?api_key=${myApi}&append_to_response=credits`
+        `https://www.myapifilms.com/tmdb/movieInfoImdb?idIMDB=${id}&token=${myApi}&format=json&language=en&alternativeTitles=0&credits=1&images=1&keywords=0&releases=1&videos=0&translations=0&similar=0&reviews=0&lists=0`
     );
 
     const data = await res.json();
@@ -362,7 +359,7 @@ const CurrMovie = async (id) => {
 
 const recomMOvie = async (id) => {
     const res = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${myApi}`
+        `https://www.myapifilms.com/tmdb/movieInfoImdb?idIMDB=${id}&token=${myApi}&format=json&language=en&credits=1&images=1&releases=0`
     );
     const data = await res.json();
     const recommendationMovies = data.results;
@@ -431,31 +428,31 @@ const simimarMoviefun = (movie) => {
 
 
 
-recomMOvie(fetcid).then((movies) => {
-    movies.forEach((moviee) => {
-        const html3 = recommMovieFun(moviee);
-        recommendationMoviesDiv.insertAdjacentHTML("beforeend", html3);
-    });
+// recomMOvie(fetcid).then((movies) => {
+//     movies.forEach((moviee) => {
+//         const html3 = recommMovieFun(moviee);
+//         recommendationMoviesDiv.insertAdjacentHTML("beforeend", html3);
+//     });
 
-    const recommenMovies = document.querySelectorAll(".recommenMovies");
-    recommenMovies.forEach(
-        (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
-    );
-});
+//     const recommenMovies = document.querySelectorAll(".recommenMovies");
+//     recommenMovies.forEach(
+//         (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
+//     );
+// });
 
 
 
-SimilarMOvie(fetcid).then((movies) => {
-    movies.forEach((moviee) => {
-        const htmll = simimarMoviefun(moviee);
-        SimilarMoviesDiv.insertAdjacentHTML("beforeend", htmll);
-    });
+// SimilarMOvie(fetcid).then((movies) => {
+//     movies.forEach((moviee) => {
+//         const htmll = simimarMoviefun(moviee);
+//         SimilarMoviesDiv.insertAdjacentHTML("beforeend", htmll);
+//     });
 
-    const similarMovies = document.querySelectorAll(".similarMovies");
-    similarMovies.forEach(
-        (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
-    );
-});
+//     const similarMovies = document.querySelectorAll(".similarMovies");
+//     similarMovies.forEach(
+//         (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
+//     );
+// });
 
 
 
@@ -469,14 +466,14 @@ const movieId = function (e) {
             let htm = "";
             htm = html2(dat);
             movieDetails.innerHTML = htm;
-            let BigPoster = Bigposter(dat);
+            let BigPoster = Bigposter(dat.images.filter(i => i.image_type == 'BACKDROP')[0]);
             posterBBig.innerHTML = BigPoster;
             sectionStory.textContent = dat.overview;
         });
     }
 };
 
-NowPlayingMoviesDiv.addEventListener("click", movieId);
+//NowPlayingMoviesDiv.addEventListener("click", movieId);
 
 
 

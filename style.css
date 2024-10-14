@@ -14,7 +14,7 @@ body {
 :root {
     --background: #151728;
     ;
-    --shadow: rgba(0, 0, 0, 0.1) 0px 3px 6px 0px, rgba(0, 0, 0, 0.08) 0px 1px 3px 0px;
+    --shadow: rgba(0, 0, 0, 0.51) 0px 3px 6px 0px, rgba(0, 0, 0, 0.08) 0px 1px 3px 0px
 }
 
 body {
@@ -35,7 +35,9 @@ body {
     transition-timing-function: linear;
 }
 
-
+.movie_details_category_ul_li {
+    white-space: nowrap;
+}
 
 .sidenav_container {
     width: 5rem;
@@ -553,6 +555,10 @@ body.minimize_siderbar .section_one_movieDetail {
     border-radius: 20px;
     transition-duration: 0.3s;
     transition-timing-function: linear;
+    max-width: 166px;
+    max-height: 266px;
+    width: auto;
+    height: 100vh;
 }
 
 .posterlink {
@@ -794,11 +800,43 @@ body.minimize_siderbar .section_one_movieDetail {
 }
 
 .movie_details {
+    padding-top: 48px;
+
 
     display: flex;
     align-items: center;
     gap: 2rem;
     background-color: var(--background);
+}
+
+.movie_details_plot,
+.movie_details_actors {
+    margin: 8px;
+    width: 90%;
+}
+
+.movie_details_actors div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto;
+    align-items:center;
+}
+
+.Casdiv .castdiv, .Casdiv .castdiv figure, .movie_details_actors .castdiv ,.movie_details_actors .name_character_container,.Casdiv .name_character_container ,.movie_details_actors .name_character_container figure {
+    max-width: 209px;
+    width:209px;
+}
+
+.Casdiv .castdiv figure {
+    text-align: center;
+}
+
+.Casdiv .castdiv .movie_title {
+    text-align: center;
+    overflow: auto;
+    height: inherit;
+    white-space: wrap;
 }
 
 .movie_details_poster {
@@ -817,11 +855,12 @@ body.minimize_siderbar .section_one_movieDetail {
     flex-direction: column;
     gap: 1rem;
 
+    color: yellow;
+
 
 }
 
 .movie_details_title {
-
     width: 31rem;
     font-size: 31px;
     word-break: break-word;
@@ -885,6 +924,10 @@ body.minimize_siderbar .section_one_movieDetail {
     color: black;
 }
 
+body.light .section_story {
+    color: rgba(21, 23, 40, 0);
+}
+
 .section_story {
     width: 85%;
     color: #a9a9a9;
@@ -925,6 +968,10 @@ body.light .movieDetailnavContainer {
 
 body.light .bgadd {
     background-color: rgb(239 239 239 / 82%);
+}
+
+body.light .movie_details_about {
+    color: black;
 }
 
 
@@ -1713,6 +1760,11 @@ body.light .msg_episode {
         width: 8rem;
     }
 
+    .Now_playing_movies.castdiv {
+        position: relative;
+        transform: none !important;
+    }
+
 
     .date {
         font-size: 11px;
@@ -1737,7 +1789,13 @@ body.light .msg_episode {
         margin: 0;
         width: 96%;
         height: 17rem;
+        position: relative;
+
+
+        display: block;
     }
+
+    .Casdiv .castdiv { margin-left: auto; margin-right: auto; }
 
     .leftarrow {
         left: -15px;
@@ -1783,7 +1841,7 @@ body.light .msg_episode {
         margin-right: 9px;
     }
 
-    phonedeactive {
+    .phonedeactive {
         display: none;
     }
 
@@ -1856,6 +1914,7 @@ body.light .msg_episode {
         flex-direction: column;
         gap: 1rem;
         align-items: center;
+        margin-left: 2rem;
     }
 
     .movie_details_about_category_ul {
@@ -1901,6 +1960,8 @@ body.light .msg_episode {
     .Now_playing_movies_div_movieDetail,
     .Casdiv {
         margin: 13px 29px 30px 9px;
+        height: auto;
+        text-align: center;
     }
 
     .alertMsg {
@@ -2393,10 +2454,6 @@ body.light .menu ul li.hovered a ::after {
 .casteecharacter {
     font-size: 13px;
     color: #a7a7a7;
-}
-
-.Casdiv {
-    height: 21rem;
 }
 
 
