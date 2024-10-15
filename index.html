@@ -240,28 +240,7 @@
             </section>
         </section>
     </main>
-
-    <script src="./spatial.js"></script>
-    <script src="./scriptl.js"></script>
-    <script>
-        function initSpatialNav() {
-            SpatialNavigation.init();
-
-            // Define navigable elements (anchors and elements with "focusable" class).
-            SpatialNavigation.add({
-                selector: '.section_two .Now_playing_movies_container .Now_playing_movies_div .Now_playing_movies',
-                defaultElement: '.section_two .Now_playing_movies_container .Now_playing_movies_div .Now_playing_movies:first-child',
-                enterTo: 'default-element',
-                straightOnly: false
-            });
-
-            // Make the *currently existing* navigable elements focusable.
-            SpatialNavigation.makeFocusable();
-
-            // Focus the first navigable element.
-            SpatialNavigation.focus();
-        }
-    </script>
 </body>
-
+  <script src="./spatial.js"></script>
+<script src="./scriptl.js"></script>
 </html>

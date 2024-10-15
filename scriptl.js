@@ -87,7 +87,7 @@ const outputTemplate = (movie, type, i) => {
 
     let url = "./movieDetail.html?id=" + encodeURIComponent(movie.id);
 
-    return `<div class="${type}_movies" tabindex="${movie.tabindex + (1000 * i)}">
+    return `<div class="${type}_movies" tabindex="${movie.tabindex}">
     <a class="posterlink" href=${url}>
         <img class="poster" data-id="${movie.id}" src="${movie.primaryImage.url}" alt="${movie.originalTitleText}">
     </a>
@@ -218,7 +218,7 @@ var loaded = 0;
     window.showDb = showDb;
 
     showDb.getRandomValues(3).forEach((moviee, i) => {
-        moviee.tabindex = i;
+        moviee.tabindex = 1000 + i;
         NowPlayingMoviesDiv.insertAdjacentHTML("beforeend", outputTemplate(moviee, 'Now_playing', i));
     });
 
@@ -228,7 +228,7 @@ var loaded = 0;
     );
 
     showDb.getRandomValues(9).forEach((moviee, i) => {
-        moviee.tabindex = i;
+        moviee.tabindex = 2000 + i;
         currentPopularMoviesDiv.insertAdjacentHTML("beforeend", outputTemplate(moviee, 'current_popular', i));
     });
 
@@ -237,7 +237,7 @@ var loaded = 0;
         (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
     );
     showDb.getRandomValues(12).forEach((moviee, i) => {
-        moviee.tabindex = i;
+        moviee.tabindex = 3000 + i;
         TopRatedMoviesDiv.insertAdjacentHTML("beforeend", outputTemplate(moviee, 'Top_rated', i));
     });
 
@@ -246,6 +246,7 @@ var loaded = 0;
         (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
     );
 
+    loaded = 3;
 })()
 
 // NowPlaying().then((movies) => {
@@ -354,23 +355,33 @@ const hideAlert = function () {
 
 okayBtn.addEventListener('click', hideAlert)*/
 
-window.onload = function () {
+
+
+searchbox.addEventListener('click', function () {
+    location.replace("./search.html")
+})
+
+window.addEventListener('load', function () {
     if (document.title.includes('Home')) {
         menuulLI[0].classList.add('hovered');
     }
 
     var intvl = setInterval(function () {
         if (loaded >= 3) {
-            setTimeout(initSpatialNav, 2000);
+            setTimeout(function() { 
+                loadScript();
+                document.querySelector('.Now_playing_movies_div').focus();
+                }, 3000);
+
             clearInterval(intvl);
         }
     }, 1000);
-}
+});
 
 
-searchbox.addEventListener('click', function () {
-    location.replace("./search.html")
-})
+
+
+// Call the function with the URL of the JavaScript file you want to load
 
 
 

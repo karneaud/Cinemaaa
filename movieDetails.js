@@ -48,7 +48,8 @@ const Castfun = (castee) => {
 
 let url = document.location.href;
 let fetcid = url.slice(url.indexOf("=") + 1);
-window.onload = function () {
+let loaded = 0;
+window.addEventListener('load', function () {
     CurrMovie(fetcid).then(({ data }) => {
         let htm = "";
         htm = html2(data);
@@ -65,9 +66,10 @@ window.onload = function () {
         // castdiv.forEach(
         //     (ele, i) => (ele.style.transform = `TranslateX(${i * 115}%)`)
         // );
+        loaded = 3;
     });
 
-};
+});
 
 
 
@@ -355,6 +357,21 @@ const CurrMovie = async (id) => {
 
 
 
+window.addEventListener('load', function () {
+    var intvl = setInterval(function () {
+        if (loaded >= 3) {
+            setTimeout(loadScript, 2000);
+            clearInterval(intvl);
+        }
+    }, 1000);
+});
+
+function loadScript() {
+    var src =loadScript('https://wicg.github.io/spatial-navigation/polyfill/spatial-navigation-polyfill.js'),    script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    document.head.appendChild(script);
+}
 
 
 const recomMOvie = async (id) => {
